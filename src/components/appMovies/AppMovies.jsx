@@ -8,11 +8,14 @@ import {grey} from "@mui/material/colors";
 const AppMovies = () => {
 	const mainColor = grey[900];
 	const [moviesData, setMoviesData] = useState([]);
+
 	const {getAllMovies, loading} = useSwApiService();
 
-	useEffect(() => onRequest, [])
+	useEffect(() => onRequest(), [])
 
-	const onRequest = () => getAllMovies().then(onMovieLoaded);
+	const onRequest = () => {
+		getAllMovies().then(onMovieLoaded);
+	}
 
 
 	const onMovieLoaded = movie => setMoviesData(movie);

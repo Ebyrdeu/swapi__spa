@@ -14,12 +14,14 @@ const AppCharacters = () => {
 
 	const {getAllCharacters, loading} = useSwApiService();
 
-	useEffect(() => onRequest, []);
+	useEffect(() => onRequest(offset), []);
 
-	const onRequest = () => getAllCharacters(offset).then(onCharLoaded);
+	const onRequest = (offset) => {
+		getAllCharacters(offset).then(onCharLoaded);
+	}
 
 
-	const onCharLoaded = (newCharList) => {
+	const onCharLoaded = (newCharList)=> {
 		setCharData((charData) => [...charData, ...newCharList]);
 		setOffset(offset => offset + 1);
 	}
@@ -55,7 +57,7 @@ const AppCharacters = () => {
 
 	}
 	const items = renderChars(charData);
-	const whileLoading = loading ? <CardListSkeleton/> : null;
+	const whileLoading = loading  ? <CardListSkeleton/> : null;
 
 	return (
 		<Container>

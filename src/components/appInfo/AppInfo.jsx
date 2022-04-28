@@ -26,10 +26,12 @@ const AppInfoMovieCard = () => {
 	const [movieData, setMovieata] = useState({});
 	const [click, setClick] = useState(false);
 
-	const onMovieRequest = () => getMovie(id).then(onMovieLoaded);
+	const onMovieRequest = () => {
+		getMovie(id).then(onMovieLoaded)
+	};
 	const onMovieLoaded = char => setMovieata(char);
 
-	useEffect(() => onMovieRequest, []);
+	useEffect(() => onMovieRequest(), []);
 
 	const {title,episode_id,director,producer,release_date, characters} = movieData;
 
@@ -62,10 +64,12 @@ const AppInfoCharCard = () => {
 	const [click, setClick] = useState(false);
 	const [charData, setChardata] = useState([])
 
-	const onCharRequest = () => getChar(id).then(onCharLoaded);
+	const onCharRequest = () => {
+		getChar(id).then(onCharLoaded);
+	}
 	const onCharLoaded = char => setChardata(char);
 
-	useEffect(() => onCharRequest, []);
+	useEffect(() => onCharRequest(), []);
 
 	const {name, height, mass,  hair_color, skin_color, eye_color, birth_year, gender,films} = charData;
 
