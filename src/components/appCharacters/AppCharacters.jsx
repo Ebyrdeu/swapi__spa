@@ -28,14 +28,16 @@ const AppCharacters = () => {
 		let count = 0;
 		const chars = arr.map(({name, height, mass, birth_year, gender}, i) => {
 			i++;
-			if (count === 16) return count = 17
+			if (count === 16) {
+				count = 17
+			}
 			count++;
 			return (
 				<Card sx={{width: 300, margin: '8px', color: mainColor}}
 				      key={i}
 				      style={{textDecoration: "none"}}
 				      as={Link}
-				      to={`/info/people/1`}>
+				      to={`/info/people/${count}`}>
 					<CardActionArea>
 						<CardContent>
 							<Typography gutterBottom variant="h5" component="div">{name}</Typography>
