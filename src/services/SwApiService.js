@@ -4,46 +4,50 @@ const useSwApiService = () => {
 	const {request, error, clearError, loading} = useHttp();
 	const _apiBase = 'https://swapi.dev/api';
 	const _offset = 1;
+
 	const getAllCharacters = async (offset = _offset) => {
 		const res = await request(`${_apiBase}/people/?page=${offset}`);
 		return res.results.map(_transformCharacter);
 	}
-	const getChar = async (id, offset = _offset) => {
-		const res = await request(`${_apiBase}/people/?page=${offset}`);
-		return res.results[id];
+
+	const getAllMovies = async () => {
+		const res = await request(`${_apiBase}/films/`);
+		return res.results.map(_transformMovie);
 	}
-	const getPlanet =  async (offset = _offset) => {
-		const res =  await request(`${_apiBase}/planets/${offset}`);
-		return res;
-	}
-	const getMovie =  async (offset = _offset) => {
-		const res =  await request(`${_apiBase}/films/${offset}`);
-		return res;
-	}
+
+	const getMovie = async (offset = _offset) => await request(`${_apiBase}/films/${offset}`);
+
+
+	const getChar = async (offset = _offset) => await request(`${_apiBase}/people/${offset}`);
+
+
 	const _transformCharacter = (char) => {
 		return {
 			name: char.name,
 			height: char.height,
 			mass: char.mass,
-			hair_color: char.hair_color,
-			skin_color: char.skin_color,
-			eye_color: char.eye_color,
 			birth_year: char.birth_year,
 			gender: char.gender,
-			homeworld: char.homeworld,
-			films: char.films
 		}
 	}
-
+	const _transformMovie = (movie) => {
+		return {
+			title: movie.title,
+			episode_id: movie.episode_id,
+			director: movie.director,
+			producer: movie.producer,
+			release_date: movie.release_date,
+		}
+	}
 
 	return {
 		error,
 		clearError,
 		loading,
 		getAllCharacters,
-		getChar,
-		getPlanet,
-		getMovie
+		getAllMovies,
+		getMovie,
+		getChar
 	}
 }
 export default useSwApiService;
