@@ -1,103 +1,80 @@
 import useSwApiService from "../../services/SwApiService";
-import {Button, Card, CardActions, CardContent, Container, Typography} from "@mui/material";
 import {useEffect, useState} from "react";
+import {Card, CardActionArea, CardContent, Container, Typography} from "@mui/material";
 import {Link} from "react-router-dom";
-import PersonSkeleton from "../skeleton/PersonSkeleton";
 import CardListSkeleton from "../skeleton/CardListSkeleton";
+import {grey} from "@mui/material/colors";
+import {LoadingButton} from "@mui/lab";
 
-
-const AppCharacters = ({onLearMore}) => {
-
-	// States
-	const [charList, setCharList] = useState([]);
+const AppCharacters = () => {
+	const [charData, setCharData] = useState([]);
 	const [offset, setOffset] = useState(1);
+	const mainColor = grey[900];
+
+
 	const {getAllCharacters, loading} = useSwApiService();
 
+	useEffect(() => onRequest, []);
 
-	// Effect
-	useEffect(() => onRequest, [])
+	const onRequest = () => getAllCharacters(offset).then(onCharLoaded);
 
 
-	//  Query
-	const onRequest = () => {
-
-		setOffset(offset + 1);
-		getAllCharacters(offset).then(onCharListLoaded);
+	const onCharLoaded = (newCharList) => {
+		setCharData((charData) => [...charData, ...newCharList]);
+		setOffset(offset => offset + 1);
 	}
 
-
-	const onCharListLoaded = (newCharList) => {
-		setCharList(charList => [...charList, ...newCharList])
-	}
-
-
-	const renderCards = (arr) => {
-		const cards = arr.map(({
-			                       name,
-			                       height,
-			                       mass,
-			                       hair_color,
-			                       skin_color,
-			                       eye_color,
-			                       birth_year,
-			                       gender,
-			                       homeworld,
-			                       films
-		                       }, id) => {
+	const renderChars = (arr) => {
+		let count = 0;
+		const chars = arr.map(({name, height, mass, birth_year, gender}, i) => {
+			i++;
+			if (count === 16) return count = 17
+			count++;
 			return (
-				<Card sx={{minWidth: 200, display: 'inline-block', margin: 1}} key={id}>
-					<CardContent>
-
-						<Typography sx={{fontSize: 24,}} color="text.primary" gutterBottom>
-							{name}
-						</Typography>
-						<Typography sx={{fontSize: 14}} color="text.primary" gutterBottom>
-							Height:{height}
-						</Typography>
-						<Typography sx={{fontSize: 14}} color="text.primary" gutterBottom>
-							Mass:{mass}
-						</Typography>
-					</CardContent>
-					<CardActions>
-						<Link to='/person' onClick={() => {
-							onLearMore({
-								name,
-								height,
-								mass,
-								hair_color,
-								skin_color,
-								eye_color,
-								birth_year,
-								gender,
-								homeworld,
-								films
-							});
-						}}>Learn More</Link>
-					</CardActions>
+				<Card sx={{width: 300, margin: '8px', color: mainColor}}
+				      key={i}
+				      style={{textDecoration: "none"}}
+				      as={Link}
+				      to={`/info/people/1`}>
+					<CardActionArea>
+						<CardContent>
+							<Typography gutterBottom variant="h5" component="div">{name}</Typography>
+							<Typography variant="body2" color="text.secondary">Height: {height}</Typography>
+							<Typography variant="body2" color="text.secondary">Mass: {mass}</Typography>
+							<Typography variant="body2" color="text.secondary">Birth year: {birth_year}</Typography>
+							<Typography variant="body2" color="text.secondary">Gender: {gender}</Typography>
+						</CardContent>
+					</CardActionArea>
 				</Card>
 			)
 		})
-		return <div>{cards}</div>
+
+		return <div style={{display: "flex", flexWrap: "wrap"}}>{chars}</div>
 
 	}
-
-	const cards = renderCards(charList);
-
-	const items = loading
-		?  <CardListSkeleton/>
-		:  <div style={{display: 'flex', justifyContent: "center"}}>{cards}</div>
+	const items = renderChars(charData);
+	const whileLoading = loading ? <CardListSkeleton/> : null;
 
 	return (
 		<Container>
 			{items}
-			<Button style={{
-				width: 400,
-				maxWidth: "100%",
-				margin: "0 auto",
-				display: 'block'
-			}} variant="contained" onClick={onRequest}>Load More</Button>
+			{whileLoading}
+			<LoadingButton
+				style={{
+					display: "block",
+					width: 250,
+					fontSize: 20,
+					margin: '0 auto'
+				}}
+				size="small"
+				onClick={() => onRequest(offset)}
+				loading={loading}
+				variant="outlined"
+				disabled={loading}>
+				Load More
+			</LoadingButton>
 		</Container>
-	);
+	)
 
 };
 
