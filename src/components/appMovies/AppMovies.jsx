@@ -53,7 +53,6 @@ const AppMovies = () => {
 		<Container>
 			{skeleton}
 			{movies}
-			<button onClick={() => console.log(movies)}>Click</button>
 		</Container>
 	);
 };
