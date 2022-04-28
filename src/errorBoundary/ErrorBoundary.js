@@ -12,19 +12,12 @@ const Portal = (props) => {
 class ErrorBoundary extends Component {
 	state = {error: false}
 
-	static getDerivedStateFromError() {
-		return { error: true };
-	}
+	static getDerivedStateFromError() {return { error: true };}
 
 	render() {
 		if (this.state.error === true) return (
 			<Portal>
-				<Alert style={{
-					position: 'absolute',
-					bottom: '10px',
-					left: '10px',
-					zIndex: '999999',
-				}} severity="error">Something Went Wrong - Reset page</Alert>
+				<Alert style={{position: 'absolute', bottom: '10px', left: '10px', zIndex: '999999',}} severity="error">Something Went Wrong - Reset page</Alert>
 			</Portal>
 		)
 		return this.props.childElement
