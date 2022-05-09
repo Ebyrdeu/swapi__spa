@@ -1,11 +1,12 @@
 import ErrorBoundary from "../../errorBoundary/ErrorBoundary";
 import AppHeader from "../appHeader/AppHeader";
-import AppCharacters from "../appCharacters/AppCharacters";
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
-import AppMovies from "../appMovies/AppMovies";
-import AppInfo from "../appInfo/AppInfo";
+import {lazy, Suspense} from "react";
+import {CircularProgress} from "@mui/material";
 
-
+const AppInfo = lazy(() => import('../appInfo/AppInfo'))
+const AppMovies = lazy(() => import('../appMovies/AppMovies'))
+const AppCharacters = lazy(() => import('../appCharacters/AppCharacters'))
 
 function App() {
 
@@ -13,11 +14,13 @@ function App() {
 		<Router>
 			<div className="App">
 				<AppHeader/>
+			<Suspense fallback={<CircularProgress />}>
 				<Routes>
 					<Route path="/" element={<ErrorBoundary childElement={<AppCharacters/>}/>}/>
 					<Route path="/movies" element={<ErrorBoundary childElement={<AppMovies/>}/>}/>
 					<Route path="/info/:type/:id" element={<ErrorBoundary childElement={<AppInfo/>}/>}/>
 				</Routes>
+			</Suspense>
 			</div>
 		</Router>
 	);
