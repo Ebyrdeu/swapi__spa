@@ -9,12 +9,11 @@ const AppMovies = () => {
 	const mainColor = grey[900];
 	const [moviesData, setMoviesData] = useState([]);
 
-	const {getAllMovies, loading, clearError} = useSwApiService();
+	const {getAllMovies, loading} = useSwApiService();
 
 	useEffect(() => () => onRequest(), [])
 
 	const onRequest = () => {
-		clearError();
 		getAllMovies().then(onMovieLoaded);
 	}
 
