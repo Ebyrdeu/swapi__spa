@@ -9,12 +9,13 @@ import {LoadingButton} from "@mui/lab";
 const AppCharacters = () => {
 	const [charData, setCharData] = useState([]);
 	const [offset, setOffset] = useState(1);
+	const [loadMoreLength, setLoadMoreLength] = useState(false);
 	const mainColor = grey[900];
 
 
 	const {getAllCharacters, loading} = useSwApiService();
 
-	useEffect(() => onRequest(offset), []);
+	useEffect(() => () => onRequest(offset), []);
 
 	const onRequest = (offset) => {
 		getAllCharacters(offset).then(onCharLoaded);
@@ -22,8 +23,10 @@ const AppCharacters = () => {
 
 
 	const onCharLoaded = (newCharList)=> {
+		const noMore = (newCharList.length < 10);
 		setCharData((charData) => [...charData, ...newCharList]);
 		setOffset(offset => offset + 1);
+		setLoadMoreLength(loadMoreLength => noMore)
 	}
 
 	const renderChars = (arr) => {
@@ -65,7 +68,7 @@ const AppCharacters = () => {
 			{whileLoading}
 			<LoadingButton
 				style={{
-					display: "block",
+					display: loadMoreLength ? 'none' : 'block',
 					width: 250,
 					fontSize: 20,
 					margin: '0 auto'

@@ -21,17 +21,19 @@ const AppInfo = () => {
 
 const AppInfoMovieCard = () => {
 	const { id } = useParams();
-	const {getMovie, loading} = useSwApiService();
+	const {getMovie, loading, clearError} = useSwApiService();
 
 	const [movieData, setMovieata] = useState({});
 	const [click, setClick] = useState(false);
 
 	const onMovieRequest = () => {
+
+		clearError();
 		getMovie(id).then(onMovieLoaded)
 	};
 	const onMovieLoaded = char => setMovieata(char);
 
-	useEffect(() => onMovieRequest(), []);
+	useEffect(() => () => onMovieRequest(), []);
 
 	const {title,episode_id,director,producer,release_date, characters} = movieData;
 
@@ -58,18 +60,19 @@ const AppInfoMovieCard = () => {
 };
 
 const AppInfoCharCard = () => {
-	const {getChar, loading} = useSwApiService();
+	const {getChar, loading, clearError} = useSwApiService();
 	const {id} = useParams();
 
 	const [click, setClick] = useState(false);
 	const [charData, setChardata] = useState([])
 
 	const onCharRequest = () => {
+		clearError();
 		getChar(id).then(onCharLoaded);
 	}
 	const onCharLoaded = char => setChardata(char);
 
-	useEffect(() => onCharRequest(), []);
+	useEffect(() => () => onCharRequest(), []);
 
 	const {name, height, mass,  hair_color, skin_color, eye_color, birth_year, gender,films} = charData;
 
