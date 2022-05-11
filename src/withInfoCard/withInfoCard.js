@@ -1,7 +1,6 @@
 import useSwApiService from "../services/SwApiService";
 import {Link, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-let i = 1;
 const withInfoCard = (InfoCard, index) => () => {
 	const {getChar, getMovie, loading, clearError} = useSwApiService();
 
